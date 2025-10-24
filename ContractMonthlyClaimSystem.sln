@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContractMonthlyClaimSystem", "ContractMonthlyClaimSystem\ContractMonthlyClaimSystem.csproj", "{7204D18D-CCDF-493A-8B7D-9A68AEC7CC8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContractMonthlyClaimSystem.Tests", "ContractMonthlyClaimSystem.Tests\ContractMonthlyClaimSystem.Tests.csproj", "{51CDDFE9-0A9A-48A3-9921-075B8F1B6897}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7204D18D-CCDF-493A-8B7D-9A68AEC7CC8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7204D18D-CCDF-493A-8B7D-9A68AEC7CC8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7204D18D-CCDF-493A-8B7D-9A68AEC7CC8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7204D18D-CCDF-493A-8B7D-9A68AEC7CC8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51CDDFE9-0A9A-48A3-9921-075B8F1B6897}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51CDDFE9-0A9A-48A3-9921-075B8F1B6897}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51CDDFE9-0A9A-48A3-9921-075B8F1B6897}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51CDDFE9-0A9A-48A3-9921-075B8F1B6897}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7CC6BBBC-A659-487D-96EA-418F51B659D3}
+	EndGlobalSection
+EndGlobal

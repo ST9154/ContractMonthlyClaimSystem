@@ -1,0 +1,44 @@
+﻿@model ContractMonthlyClaimSystem.Controllers.ErrorViewModel
+
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h1 class="display-1">@Model.StatusCode</h1>
+                </div>
+                <div class="card-body">
+                    <h2 class="text-danger">Oops! Something went wrong.</h2>
+                    <p class="lead">@Model.Message</p>
+
+                    @if (!string.IsNullOrEmpty(Model.Details))
+                    {
+                        <div class="alert alert-warning mt-3">
+                            <strong>Details:</strong> @Model.Details
+                        </div>
+                    }
+
+                    <div class="mt-4">
+                        <a href="/" class="btn btn-primary me-2">
+                            <i class="fas fa-home"></i> Go Home
+                        </a>
+                        <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Go Back
+                        </a>
+                    </div>
+
+                    @if (Model.StatusCode == 404)
+                    {
+                        <div class="mt-4">
+                            <p>If you believe this is an error, please contact support.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
