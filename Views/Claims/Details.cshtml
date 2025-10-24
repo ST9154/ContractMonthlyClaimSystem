@@ -1,0 +1,183 @@
+﻿@model ContractMonthlyClaimSystem.Models.Claim
+@{
+    ViewData["Title"] = "Claim Details";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0">Claim #@Model.Id - @Model.Status</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Lecturer:</strong> @Model.LecturerName</p>
+                            <p><strong>Email:</strong> @Model.LecturerEmail</p>
+                            <p><strong>Hours Worked:</strong> @Model.HoursWorked</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Hourly Rate:</strong> $@Model.HourlyRate</p>
+                            <p><strong>Total Amount:</strong> <span class="text-success">$@Model.TotalAmount</span></p>
+                            <p><strong>Submitted:</strong> @Model.SubmittedDate.ToString("MMM dd, yyyy hh:mm tt")</p>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Notes))
+                    {
+                        <div class="mb-3">
+                            <strong>Notes:</strong>
+                            <p class="border p-2 rounded">@Model.Notes</p>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.DocumentFileName))
+                    {
+                        <div class="mb-3">
+                            <strong>Supporting Document:</strong>
+                            <br>
+                            <a href="/uploads/@Model.DocumentFileName" target="_blank" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-download"></i> Download Document
+                            </a>
+                        </div>
+                    }
+
+                    @if (Model.Status == "Rejected" && !string.IsNullOrEmpty(Model.RejectionReason))
+                    {
+                        <div class="alert alert-danger">
+                            <strong>Rejection Reason:</strong> @Model.RejectionReason
+                        </div>
+                    }
+
+                    @if (Model.Status == "Approved")
+                    {
+                        <div class="alert alert-success">
+                            <strong>Approved by:</strong> @Model.ApprovedBy on @Model.ApprovedDate?.ToString("MMM dd, yyyy")
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Status Tracking</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Progress Bar -->
+                    <div class="progress mb-3" style="height: 25px;">
+                        @{
+                            var progressWidth = Model.Status switch
+                            {
+                                "Pending" => "33%",
+                                "Approved" => "100%",
+                                "Rejected" => "100%",
+                                _ => "0%"
+                            };
+                            var progressColor = Model.Status switch
+                            {
+                                "Pending" => "bg-warning",
+                                "Approved" => "bg-success",
+                                "Rejected" => "bg-danger",
+                                _ => "bg-secondary"
+                            };
+                        }
+                        <div class="progress-bar @progressColor" role="progressbar" style="width: @progressWidth">
+                            @Model.Status
+                        </div>
+                    </div>
+
+                    <!-- Status Steps -->
+                    <div class="status-steps">
+                        <div class="step @(Model.Status != "Pending" ? "completed" : "active")">
+                            <span class="step-number">1</span>
+                            <span class="step-label">Submitted</span>
+                            <small class="step-date">@Model.SubmittedDate.ToString("MMM dd")</small>
+                        </div>
+
+                        <div class="step @(Model.Status == "Approved" ? "completed" : Model.Status == "Rejected" ? "rejected" : "pending")">
+                            <span class="step-number">2</span>
+                            <span class="step-label">@(Model.Status == "Rejected" ? "Rejected" : "Under Review")</span>
+                            @if (Model.Status != "Pending")
+                            {
+                                <small class="step-date">@Model.ApprovedDate?.ToString("MMM dd")</small>
+                            }
+                        </div>
+
+                        @if (Model.Status == "Approved")
+                        {
+                            <div class="step completed">
+                                <span class="step-number">3</span>
+                                <span class="step-label">Approved</span>
+                                <small class="step-date">@Model.ApprovedDate?.ToString("MMM dd")</small>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Status History -->
+                    <h6 class="mt-4">Status History</h6>
+                    <div class="status-history">
+                        @foreach (var update in ViewBag.StatusHistory)
+                        {
+                            <div class="history-item border-start border-3 ps-3 mb-2">
+                                <strong>@update.Status</strong>
+                                <div class="small text-muted">
+                                    By @update.UpdatedBy on @update.UpdateDate.ToString("MMM dd, yyyy hh:mm tt")
+                                </div>
+                                @if (!string.IsNullOrEmpty(update.Notes))
+                                {
+                                    <div class="small">@update.Notes</div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a href="/Claims/MyClaims" class="btn btn-secondary">Back to My Claims</a>
+    </div>
+</div>
+
+<style>
+    .status-steps .step {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 8px;
+        border-radius: 5px;
+    }
+    .step.active {
+        background-color: #e3f2fd;
+        border-left: 4px solid #2196F3;
+    }
+    .step.completed {
+        background-color: #e8f5e8;
+        border-left: 4px solid #4CAF50;
+    }
+    .step.rejected {
+        background-color: #ffebee;
+        border-left: 4px solid #f44336;
+    }
+    .step-number {
+        background: #666;
+        color: white;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        font-weight: bold;
+    }
+    .step.active .step-number { background: #2196F3; }
+    .step.completed .step-number { background: #4CAF50; }
+    .step.rejected .step-number { background: #f44336; }
+    .step-label { flex-grow: 1; font-weight: bold; }
+    .step-date { color: #666; }
+</style>

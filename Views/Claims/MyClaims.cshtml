@@ -1,0 +1,68 @@
+﻿@model List<ContractMonthlyClaimSystem.Models.Claim>
+@{
+    ViewData["Title"] = "My Claims";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">@ViewData["Title"]</h3>
+        </div>
+        <div class="card-body">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Submitted</th>
+                                <th>Hours</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var claim in Model)
+                            {
+                                <tr>
+                                    <td>#@claim.Id</td>
+                                    <td>@claim.SubmittedDate.ToString("MMM dd, yyyy")</td>
+                                    <td>@claim.HoursWorked</td>
+                                    <td><strong>$@claim.TotalAmount</strong></td>
+                                    <td>
+                                        @if (claim.Status == "Pending")
+                                        {
+                                            <span class="badge bg-warning">@claim.Status</span>
+                                        }
+                                        else if (claim.Status == "Approved")
+                                        {
+                                            <span class="badge bg-success">@claim.Status</span>
+                                        }
+                                        else if (claim.Status == "Rejected")
+                                        {
+                                            <span class="badge bg-danger">@claim.Status</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a href="/Claims/Details/@claim.Id" class="btn btn-info btn-sm">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> You haven't submitted any claims yet.
+                    <a href="/Claims/Create" class="alert-link">Submit your first claim</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

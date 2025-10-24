@@ -1,0 +1,118 @@
+﻿@model List<ContractMonthlyClaimSystem.Models.Claim>
+
+@{
+    ViewData["Title"] = "Pending Claims Approval";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-warning">
+            <h3 class="mb-0">@ViewData["Title"]</h3>
+        </div>
+        <div class="card-body">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Lecturer</th>
+                                <th>Email</th>
+                                <th>Hours</th>
+                                <th>Rate</th>
+                                <th>Total</th>
+                                <th>Submitted</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var claim in Model)
+                            {
+                                <tr>
+                                    <td>@claim.LecturerName</td>
+                                    <td>@claim.LecturerEmail</td>
+                                    <td>@claim.HoursWorked</td>
+                                    <td>$@claim.HourlyRate</td>
+                                    <td><strong>$@claim.TotalAmount</strong></td>
+                                    <td>@claim.SubmittedDate.ToString("MMM dd, yyyy")</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#detailsModal@(claim.Id)">
+                                                View
+                                            </button>
+                                            <form method="post" asp-action="Approve" class="d-inline">
+                                                <input type="hidden" name="id" value="@claim.Id" />
+                                                <button type="submit" class="btn btn-success">Approve</button>
+                                            </form>
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal@(claim.Id)">
+                                                Reject
+                                            </button>
+                                        </div>
+
+                                        <!-- Details Modal -->
+                                        <div class="modal fade" id="detailsModal@(claim.Id)" tabindex="-1">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Claim Details</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p><strong>Lecturer:</strong> @claim.LecturerName</p>
+                                                        <p><strong>Email:</strong> @claim.LecturerEmail</p>
+                                                        <p><strong>Hours Worked:</strong> @claim.HoursWorked</p>
+                                                        <p><strong>Hourly Rate:</strong> $@claim.HourlyRate</p>
+                                                        <p><strong>Total Amount:</strong> <span class="text-success">$@claim.TotalAmount</span></p>
+                                                        <p><strong>Notes:</strong> @(string.IsNullOrEmpty(claim.Notes) ? "None" : claim.Notes)</p>
+                                                        @if (!string.IsNullOrEmpty(claim.DocumentFileName))
+                                                        {
+                                                            <p>
+                                                                <strong>Document:</strong>
+                                                                <a href="/uploads/@claim.DocumentFileName" target="_blank">View Document</a>
+                                                            </p>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Reject Modal -->
+                                        <div class="modal fade" id="rejectModal@(claim.Id)" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Reject Claim</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <form method="post" asp-action="Reject">
+                                                        <div class="modal-body">
+                                                            <input type="hidden" name="id" value="@claim.Id" />
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Rejection Reason</label>
+                                                                <textarea name="rejectionReason" class="form-control" rows="3" required></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                            <button type="submit" class="btn btn-danger">Reject Claim</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> No pending claims for approval.
+                </div>
+            }
+        </div>
+    </div>
+</div>

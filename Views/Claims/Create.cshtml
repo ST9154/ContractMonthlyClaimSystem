@@ -1,0 +1,101 @@
+﻿@model ContractMonthlyClaimSystem.Models.Claim
+
+@{
+    ViewData["Title"] = "Submit New Claim";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">@ViewData["Title"]</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="LecturerName" class="form-label">Full Name</label>
+                                    <input asp-for="LecturerName" class="form-control" />
+                                    <span asp-validation-for="LecturerName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="LecturerEmail" class="form-label">Email</label>
+                                    <input asp-for="LecturerEmail" class="form-control" />
+                                    <span asp-validation-for="LecturerEmail" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="HoursWorked" class="form-label">Hours Worked</label>
+                                    <input asp-for="HoursWorked" class="form-control" />
+                                    <span asp-validation-for="HoursWorked" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="HourlyRate" class="form-label">Hourly Rate ($)</label>
+                                    <input asp-for="HourlyRate" class="form-control" />
+                                    <span asp-validation-for="HourlyRate" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Total Amount</label>
+                            <input type="text" class="form-control" value="@(Model.HoursWorked* Model.HourlyRate)" readonly style="font-weight: bold; color: #28a745;" />
+                            <small class="form-text text-muted">Calculated automatically</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes" class="form-label">Additional Notes</label>
+                            <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Supporting Document</label>
+                            <input type="file" name="supportingDocument" class="form-control"
+                                   accept=".pdf,.docx,.xlsx,.jpg,.png" />
+                            <small class="form-text text-muted">
+                                Max file size: 10MB. Allowed types: PDF, DOCX, XLSX, JPG, PNG
+                            </small>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-paper-plane"></i> Submit Claim
+                            </button>
+                            <a href="/" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // Auto-calculate total amount
+        document.getElementById('HoursWorked').addEventListener('input', calculateTotal);
+        document.getElementById('HourlyRate').addEventListener('input', calculateTotal);
+
+        function calculateTotal() {
+            const hours = parseFloat(document.getElementById('HoursWorked').value) || 0;
+            const rate = parseFloat(document.getElementById('HourlyRate').value) || 0;
+            const total = hours * rate;
+            document.querySelector('input[readonly]').value = '$' + total.toFixed(2);
+        }
+    </script>
+}
