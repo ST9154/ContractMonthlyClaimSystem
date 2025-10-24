@@ -20,3 +20,31 @@ A comprehensive web application for managing monthly claims submission and appro
 - Bootstrap 5 for UI
 
 ## Project Structure
+ContractMonthlyClaimSystem/
+├── Controllers/
+│ ├── ClaimsController.cs
+│ ├── ApprovalController.cs
+│ └── ErrorController.cs
+├── Models/
+│ └── Claim.cs (includes StatusUpdate)
+├── Views/
+├── Data/
+│ └── ApplicationDbContext.cs
+└── Tests/
+├── ClaimsControllerTests.cs
+├── ApprovalControllerTests.cs
+└── ModelValidationTests.cs
+
+
+## Getting Started
+
+1. Clone the repository
+2. Update connection string in `appsettings.json`
+3. Run `Add-Migration InitialCreate` and `Update-Database`
+4. Run the application
+
+## Testing
+
+All 12 unit tests are passing:
+```bash
+dotnet test
